@@ -14,15 +14,7 @@ CREATE TABLE array_element (
     FOREIGN KEY (array_id) REFERENCES array(id)
 );
 
--- Data analyst friendly table (max size 5)
--- |  name  | idx0 | idx1 | idx2 | idx3 | idx4 |
--- | ------ | ---- | ---- | ---- | ---- | ---- |
--- |  exact |    a |    b |    c |    d |    e |
--- |  small |    h |    i | NULL | NULL | NULL |
--- |  large |    1 |    2 |    3 |    4 |    5 |
--- | nonseq | NULL |    y | NULL | NULL | NULL |
--- |  empty | NULL | NULL | NULL | NULL | NULL |
-
+-- array_view is data analyst friendly view on an array (max size 5)
 CREATE VIEW array_view AS
 SELECT a.name,
   MAX(CASE WHEN idx = 0 THEN value END) AS '0',
@@ -58,3 +50,12 @@ INSERT INTO array (id, name) VALUES (3, 'nonseq');
 INSERT INTO array_element (array_id, idx, value) VALUES (3, 1, 'x');
 
 INSERT INTO array (id, name) VALUES (4, 'empty');
+
+-- array_view
+-- |  name  |    0 |    1 |    2 |    3 |    4 |
+-- | ------ | ---- | ---- | ---- | ---- | ---- |
+-- |  exact |    a |    b |    c |    d |    e |
+-- |  small |    h |    i | NULL | NULL | NULL |
+-- |  large |    1 |    2 |    3 |    4 |    5 |
+-- | nonseq | NULL |    y | NULL | NULL | NULL |
+-- |  empty | NULL | NULL | NULL | NULL | NULL |
